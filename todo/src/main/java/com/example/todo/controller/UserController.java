@@ -82,6 +82,9 @@ public class UserController {
     public ResponseEntity<?> deleteAccount(@RequestBody UserDTO userDTO) {
         try {
             String userId = userDTO.getId();
+            if (userId == null) {
+                throw new IllegalArgumentException("User ID must not be null");
+            }
             userService.delete(userId);
             return ResponseEntity.ok().body(Map.of("message", "User deleted successfully"));
         } catch (Exception e) {
@@ -90,27 +93,6 @@ public class UserController {
         }
     }
 
-	
 
-    
-	/*
-	 * @PostMapping("/delaccount") public ResponseEntity<?>
-	 * deleteAccount(@AuthenticationPrincipal String userId, @RequestBody UserDTO
-	 * userDTO){ try { UserEntity userEntity = UserDTO.toEntity(userDTO);
-	 * userEntity.setId(userId); // 사용자 ID 설정
-	 * 
-	 * // 서비스 계층을 통해 사용자 삭제 UserEntity deletedUser = userService.delete(userEntity);
-	 * 
-	 * UserDTO deletedUserDTO = UserDTO.fromEntity(deletedUser);
-	 * 
-	 * ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder()
-	 * .data(Collections.singletonList(deletedUserDTO)) .build(); return
-	 * ResponseEntity.ok().body(response); } catch(Exception e) {
-	 * 
-	 * String error = e.getMessage(); ResponseDTO<UserDTO> response =
-	 * ResponseDTO.<UserDTO>builder() .error(error) .build(); return
-	 * ResponseEntity.badRequest().body(response); } }
-	 */
-    
 
 }
