@@ -1,8 +1,9 @@
 package com.example.todo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.todo.model.UserEntity;
 import com.example.todo.persistence.UserRepository;
 
@@ -34,4 +35,29 @@ public class UserService {
 		}
 		return null;
 	}
+	///
+	public UserEntity getById(String userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+	///////
+	public void delete(String userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("[account_delete]id does not exist");
+        }
+    }
+	
+	
+	
+    ///
+	/*
+	 * public UserEntity delete(final UserEntity userEntity){
+	 * if(userRepository.existsById(userEntity.getId()))
+	 * userRepository.deleteById(userEntity.getId()); else throw new
+	 * RuntimeException("[account_delete]id does not exist"); return userEntity; }
+	 */
+    ///
+    	
 }

@@ -1,14 +1,15 @@
 package com.example.todo.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.todo.dto.ResponseDTO;
 import com.example.todo.dto.UserDTO;
@@ -75,4 +76,41 @@ public class UserController {
 			return ResponseEntity.badRequest().body(responseDTO);
 		}
 	}
+
+	
+    @PostMapping("/delaccount")
+    public ResponseEntity<?> deleteAccount(@RequestBody UserDTO userDTO) {
+        try {
+            String userId = userDTO.getId();
+            userService.delete(userId);
+            return ResponseEntity.ok().body(Map.of("message", "User deleted successfully"));
+        } catch (Exception e) {
+            ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+	
+
+    
+	/*
+	 * @PostMapping("/delaccount") public ResponseEntity<?>
+	 * deleteAccount(@AuthenticationPrincipal String userId, @RequestBody UserDTO
+	 * userDTO){ try { UserEntity userEntity = UserDTO.toEntity(userDTO);
+	 * userEntity.setId(userId); // 사용자 ID 설정
+	 * 
+	 * // 서비스 계층을 통해 사용자 삭제 UserEntity deletedUser = userService.delete(userEntity);
+	 * 
+	 * UserDTO deletedUserDTO = UserDTO.fromEntity(deletedUser);
+	 * 
+	 * ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder()
+	 * .data(Collections.singletonList(deletedUserDTO)) .build(); return
+	 * ResponseEntity.ok().body(response); } catch(Exception e) {
+	 * 
+	 * String error = e.getMessage(); ResponseDTO<UserDTO> response =
+	 * ResponseDTO.<UserDTO>builder() .error(error) .build(); return
+	 * ResponseEntity.badRequest().body(response); } }
+	 */
+    
+
 }
